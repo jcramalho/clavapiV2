@@ -1,0 +1,27 @@
+{
+  "name": "clavapiv2",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "nodemon": "^1.18.4",
+    "sparql-client-2": "^0.6.3",
+    "swagger-ui-express": "^4.0.1"
+  },
+  "description": "CLAV API",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcramalho/clavapiV2.git"
+  },
+  "author": "jcr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcramalho/clavapiV2/issues"
+  },
+  "homepage": "https://github.com/jcramalho/clavapiV2#readme"
+}
