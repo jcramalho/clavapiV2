@@ -95,28 +95,16 @@ router.get('/:id/procRel', (req, res) => {
         .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta dos processos relacionados da classe "+req.params.id+": " + erro}))
 })
 
-
-
-
-router.get('/filtrar/comuns', function (req, res) {
-    Classes.filterCommon()
-        .then(list => res.send(list))
-        .catch(function (error) {
-            console.error(error);
-        });
+// Devolve a legislação associada ao contexto de avaliação: id, tipo, numero, sumario
+router.get('/:id/legislacao', (req, res) => {
+    Classes.legislacao(req.params.id)
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['id', 'tipo', 'numero', 'sumario'])))
+        .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta da legislação associada à classe "+req.params.id+": " + erro}))
 })
 
-router.get('/filtrar/restantes/(:tipols)?', function (req, res) {
-    if(req.params.tipols){
-        var orgs = req.params.tipols.split(',');
-    }
 
-    Classes.filterRest(orgs)
-        .then(list => res.send(list))
-        .catch(function (error) {
-            console.error(error);
-        });
-})
+
+
 
 router.get('/filtrar/:orgs', function (req, res) {
     Classes.filterByOrgs(req.params.orgs.split(','))

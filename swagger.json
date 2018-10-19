@@ -382,6 +382,37 @@
         }
       }
     },
+    "/classes/{id}/legislacao": {
+      "get": {
+        "tags": [
+          "Classe"
+        ],
+        "summary": "Devolve a legislação associada ao contexto de avaliação",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da classe",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
     "/entidades": {
       "get": {
         "tags": [

@@ -189,6 +189,21 @@ Classes.procRel = id => {
         .catch(error => console.error(error))
 }
 
+// Devolve a legislação associada ao contexto de avaliação: id, tipo, numero, sumario
+Classes.legislacao = id => {
+    var fetchQuery = `
+        SELECT ?id ?tipo ?numero ?sumario WHERE { 
+            clav:${id} clav:temLegislacao ?id.
+            ?id clav:diplomaNumero ?numero;
+                clav:diplomaTitulo ?sumario;
+                clav:diplomaTipo ?tipo.
+    } order by ?tipo ?numero`;
+
+    return client.query(fetchQuery).execute()
+        .then(response => Promise.resolve(response.results.bindings))
+        .catch(error => console.error(error))
+}
+
 
 
 
@@ -415,23 +430,6 @@ Classes.childrenNew = function (id) {
     return client.query(fetchQuery)
         .execute()
         //getting the content we want
-        .then(response => Promise.resolve(response.results.bindings))
-        .catch(function (error) {
-            console.error(error);
-        });
-}
-
-Classes.legislation = function (id) {
-    var fetchQuery = `
-            SELECT * WHERE { 
-                clav:${id} clav:temLegislacao ?id.
-                ?id clav:diplomaNumero ?Número;
-                    clav:diplomaTitulo ?Titulo;
-                    clav:diplomaTipo ?Tipo;
-            }`;
-
-
-    return client.query(fetchQuery).execute()
         .then(response => Promise.resolve(response.results.bindings))
         .catch(function (error) {
             console.error(error);
