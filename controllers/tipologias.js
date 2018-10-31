@@ -4,10 +4,10 @@ var Tipologias = module.exports
 
 Tipologias.list = () => {
     return client.query(
-        `SELECT * {
+        `SELECT ?id ?sigla ?designacao {
             ?id rdf:type clav:TipologiaEntidade ;
                 clav:tipEstado "Ativa";
-                clav:tipDesignacao ?desig ;
+                clav:tipDesignacao ?designacao ;
                 clav:tipSigla ?sigla .
         }`
     )
@@ -16,27 +16,26 @@ Tipologias.list = () => {
         .catch(error => console.error("Erro na listagem das tipologias(controller): " + error))
 }
 
-Tipologias.elems = id => {
+Tipologias.elementos = id => {
     var fetchQuery = `
-        SELECT * WHERE {
+        SELECT ?id ?sigla ?designacao WHERE {
             ?id clav:pertenceTipologiaEnt clav:${id} .
             
             ?id clav:entEstado "Ativa";
                 clav:entSigla ?sigla;
-                clav:entDesignacao ?desig.
+                clav:entDesignacao ?designacao.
         }`
     return client.query(fetchQuery).execute()
         .then(response => Promise.resolve(response.results.bindings))
         .catch(error => console.error("Erro na listagem dos membros da tipologia " + id + ": " + error))
 }
 
-
 Tipologias.consulta = id => {
     return client.query(`
-        SELECT * where {
-            clav:${id} clav:tipDesignacao ?Designacao ;
-                clav:tipSigla ?Sigla ;
-                clav:tipEstado ?Estado ;
+        SELECT ?sigla ?designacao ?estado where {
+            clav:${id} clav:tipDesignacao ?designacao ;
+                clav:tipSigla ?sigla ;
+                clav:tipEstado ?estado ;
         }`
     )
         .execute()

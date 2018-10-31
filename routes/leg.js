@@ -1,39 +1,28 @@
 var Leg = require('../controllers/leg.js');
+var fa = require('../controllers/funcAux.js')
 
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (req, res) {
-    Leg.list()
-        .then(legs => res.send(legs))
-        .catch(function (error) {
-            console.error(error);
-        });
+// Lista todos os itens legislativos: id, data, numero, tipo, sumario, entidades
+router.get('/', (req, res) => {
+    Leg.list()      
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['id', 'data', 'numero', 'tipo','sumario', 'entidades'])))
+        .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na listagem da legislação: " + erro}))
 })
 
-router.get('/numElems', function (req, res) {
-    Leg.ultNum()
-        .then(n => {
-            res.send(n)
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
+// Devolve a informação associada a um documento legislativo: tipo data numero sumario link entidades
+router.get('/:id', (req, res) => {
+    Leg.consulta(req.params.id)
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['tipo', 'data', 'numero', 'sumario', 'link', 'entidades'])))
+        .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na consulta da legislação: " + erro}))
 })
 
-router.get('/:id', function (req, res) {
-    Leg.stats(req.params.id).then(leg => res.send(leg))
-        .catch(function (error) {
-            console.error(error);
-        });
-})
-
-router.get('/:id/regula', function (req, res) {
-    Leg.regulates(req.params.id)
-        .then(legs => res.send(legs))
-        .catch(function (error) {
-            console.error(error);
-        });
+// Devolve a lista de processos regulados pelo documento: id, codigo, titulo
+router.get('/:id/regula', (req, res) => {
+    Leg.regula(req.params.id)
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['id', 'codigo', 'titulo'])))
+        .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na consulta dos processos regulados: " + erro}))
 })
 
 module.exports = router;

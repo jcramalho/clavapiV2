@@ -4,12 +4,12 @@ var Entidades = module.exports
 
 Entidades.list = function () {
     return client.query(
-        `SELECT * {
+        `SELECT ?id ?sigla ?designacao ?internacional {
             ?id rdf:type clav:Entidade ;
                 clav:entEstado "Ativa";
-                clav:entDesignacao ?Designacao ;
-                clav:entSigla ?Sigla ;
-                clav:entInternacional ?Internacional.
+                clav:entDesignacao ?designacao ;
+                clav:entSigla ?sigla ;
+                clav:entInternacional ?internacional.
         }`
     )
         .execute()
@@ -19,40 +19,35 @@ Entidades.list = function () {
         });
 }
 
-Entidades.inTipols = function (id) {
+Entidades.tipologias = id => {
     var fetchQuery = `
-        SELECT * WHERE {
+        SELECT ?id ?sigla ?designacao WHERE {
             clav:${id} clav:pertenceTipologiaEnt ?id .
             
             ?id clav:tipEstado "Ativa";
-                clav:tipSigla ?Sigla;
-                clav:tipDesignacao ?Designacao.
+                clav:tipSigla ?sigla;
+                clav:tipDesignacao ?designacao.
         }
-    `;
-
+    `
     return client.query(fetchQuery).execute()
         .then(response => Promise.resolve(response.results.bindings))
-        .catch(function (error) {
-            console.error("Tipologias a que x pertence: " + error);
-        });
+        .catch(error => console.error("Tipologias a que x pertence: " + error))
 }
 
-Entidades.consulta = function (id) {
+Entidades.consulta = id => {
     return client.query(`
-    SELECT ?sigla ?desig ?estado ?inter
+    SELECT ?sigla ?designacao ?estado ?internacional
     WHERE {
-            clav:${id} clav:entDesignacao ?desig ;
+            clav:${id} rdf:type clav:Entidade ;
+                clav:entDesignacao ?designacao ;
                 clav:entSigla ?sigla ;
                 clav:entEstado ?estado ;
-                clav:entInternacional ?inter .
+                clav:entInternacional ?internacional .
     }`
     )
         .execute()
-        //getting the content we want
         .then(response => Promise.resolve(response.results.bindings))
-        .catch(function (error) {
-            console.error("Erro na consulta de uma entidade: " + error);
-        });
+        .catch(error => console.error("Erro na consulta de uma entidade: " + error))
 }
 
 Entidades.stats = function (id) {
@@ -72,46 +67,38 @@ Entidades.stats = function (id) {
         });
 }
 
-Entidades.domain = function (id) {
+Entidades.dono = id => {
     var fetchQuery = `
-        SELECT * WHERE {
+        SELECT ?id ?codigo ?titulo WHERE {
             ?id clav:temDono clav:${id} ;
-                clav:codigo ?Code ;
-                clav:titulo ?Title ;
+                clav:codigo ?codigo ;
+                clav:titulo ?titulo ;
                 clav:pertenceLC clav:lc1 ;
                 clav:classeStatus "A" .
         }
-    `;
-
+    `
     return client.query(fetchQuery)
         .execute()
         .then(response => Promise.resolve(response.results.bindings))
-        .catch(function (error) {
-            console.error("Dominio de org: " + error);
-        });
+        .catch(error => console.error("Dominio de org: " + error))
 }
 
-Entidades.participations = function (id) {
+Entidades.participante = id => {
     var fetchQuery = `
-        select * where { 
+        select ?id ?codigo ?titulo where { 
             ?id clav:temParticipante clav:${id} ;
                 ?Type clav:${id} ;
-            
-                clav:titulo ?Title ;
-                clav:codigo ?Code ;
+                clav:titulo ?titulo ;
+                clav:codigo ?codigo ;
                 clav:pertenceLC clav:lc1 ;
                 clav:classeStatus "A" .
             
             filter (?Type!=clav:temParticipante && ?Type!=clav:temDono)
         }`
-        ;
-
     return client.query(fetchQuery)
         .execute()
         .then(response => Promise.resolve(response.results.bindings))
-        .catch(function (error) {
-            console.error("Erro no acesso ao GraphDB, participações de uma entidade: " + error);
-        });
+        .catch(error => console.error("Erro no acesso ao GraphDB, participações de uma entidade: " + error))
 }
 
 Entidades.checkAvailability = function (name, initials) {

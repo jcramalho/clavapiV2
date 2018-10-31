@@ -102,6 +102,28 @@ router.get('/:id/legislacao', (req, res) => {
         .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta da legislação associada à classe "+req.params.id+": " + erro}))
 })
 
+// Devolve a informação do PCA
+router.get('/:id/pca', (req, res) => {
+    Classes.pca(req.params.id)
+        .then(dados => {
+            let criteria = dados.Criterios.value.split("###");
+            criteria = criteria.map(a => a.replace(/[^#]+#(.*)/, '$1'));
+
+            Classes.criteria(criteria)
+                .then(function (criteriaData) {
+
+                    dados.Criterios.type = "array";
+                    dados.Criterios.value = criteriaData;
+
+                    res.jsonp(dados)
+                })
+                .catch(error => console.error(error));
+        })
+        .catch(error => console.error(error));
+})
+
+
+
 
 
 
@@ -120,41 +142,6 @@ router.get('/:id/descendenciaIndex', function (req, res) {
         .catch(function (error) {
             console.error(error);
         });
-})
-
-router.get('/:id/legislacao', function (req, res) {
-    Classes.legislation(req.params.id)
-        .then(legs => res.send(legs))
-        .catch(function (error) {
-            console.error(error);
-        });
-})
-
-router.get('/:id/participantes', function (req, res) {
-    Classes.participants(req.params.id)
-        .then(list => res.send(list))
-        .catch(function (error) {
-            console.error(error);
-        });
-})
-
-router.get('/:id/pca', function (req, res) {
-    Classes.pca(req.params.id)
-        .then(function (data) {
-            let criteria = data.Criterios.value.split("###");
-            criteria = criteria.map(a => a.replace(/[^#]+#(.*)/, '$1'));
-
-            Classes.criteria(criteria)
-                .then(function (criteriaData) {
-
-                    data.Criterios.type = "array";
-                    data.Criterios.value = criteriaData;
-
-                    res.send(data);
-                })
-                .catch(error=>console.error(error));
-        })
-        .catch(error=>console.error(error));
 })
 
 router.get('/:id/df', function (req, res) {

@@ -1,11 +1,11 @@
-var Tipologias = require('../controllers/tipologias.js');
+var Vocabularios = require('../controllers/vocabularios.js');
 var fa = require('../controllers/funcAux.js')
 
 var express = require('express');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-    Tipologias.list()
+    Vocabularios.list()
         .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['id', 'sigla', 'designacao'])))
         .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na listagem das tipologias: " + erro}))
 })

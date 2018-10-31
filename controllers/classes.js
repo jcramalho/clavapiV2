@@ -204,6 +204,45 @@ Classes.legislacao = id => {
         .catch(error => console.error(error))
 }
 
+// Devolve a informação do PCA
+Classes.pca = id => {
+    var fetchQuery = `
+        SELECT 
+            ?contNormID
+            ?contagemNorm
+            ?subContID
+            ?subContagem
+            (GROUP_CONCAT(DISTINCT ?nota; SEPARATOR="###") AS ?Notas)
+            (GROUP_CONCAT(DISTINCT ?valor; SEPARATOR="###") AS ?Valores)
+            (GROUP_CONCAT(DISTINCT ?criterio; SEPARATOR="###") AS ?Criterios)
+        WHERE { 
+            clav:${id} clav:temPCA ?pca .
+            optional {
+                ?pca clav:pcaFormaContagemNormalizada ?contNormID .    
+                ?contNormID skos:prefLabel ?contagemNorm .
+            }
+            optional {
+                ?pca clav:pcaSubformaContagem ?subContID .
+                ?subContID skos:scopeNote ?subContagem .
+            }
+            
+            OPTIONAL {
+                ?pca clav:pcaNota ?nota ;
+            }
+            OPTIONAL {
+                ?pca clav:pcaValor ?valor ;
+            }
+            OPTIONAL {
+                ?pca clav:temJustificacao ?just .
+                ?just clav:temCriterio ?criterio
+            }    
+        }GROUP BY ?contNormID ?contagemNorm ?subContagem  ?subContID 
+    `
+    return client.query(fetchQuery).execute()
+        .then(response => Promise.resolve(response.results.bindings[0]))
+        .catch(error => console.error(error))
+}
+
 
 
 
@@ -433,47 +472,6 @@ Classes.childrenNew = function (id) {
         .then(response => Promise.resolve(response.results.bindings))
         .catch(function (error) {
             console.error(error);
-        });
-}
-
-Classes.pca = function (id) {
-    var fetchQuery = `
-        SELECT 
-            ?SubContID
-            ?SubContagem
-            ?ContNormID
-            ?ContagemNorm
-            (GROUP_CONCAT(DISTINCT ?Nota; SEPARATOR="###") AS ?Notas)
-            (GROUP_CONCAT(DISTINCT ?Valor; SEPARATOR="###") AS ?Valores)
-            (GROUP_CONCAT(DISTINCT ?Criterio; SEPARATOR="###") AS ?Criterios)
-        WHERE { 
-            clav:${id} clav:temPCA ?pca .
-            optional {
-                ?pca clav:pcaSubformaContagem ?SubContID .
-                ?SubContID skos:scopeNote ?SubContagem .
-            }
-            optional {
-                ?pca clav:pcaFormaContagemNormalizada ?ContNormID .    
-                ?ContNormID skos:prefLabel ?ContagemNorm .
-            }
-            OPTIONAL {
-                ?pca clav:pcaNota ?Nota ;
-            }
-            OPTIONAL {
-                ?pca clav:pcaValor ?Valor ;
-            }
-            OPTIONAL {
-                ?pca clav:temJustificacao ?just .
-                ?just clav:temCriterio ?Criterio
-            }    
-        }GROUP BY ?SubContagem ?ContagemNorm ?SubContID ?ContNormID
-    `;
-
-    return client.query(fetchQuery).execute()
-        //Getting the content we want
-        .then(response => Promise.resolve(response.results.bindings[0]))
-        .catch(function (error) {
-            console.error("Error in check:\n" + error);
         });
 }
 

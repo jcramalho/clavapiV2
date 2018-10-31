@@ -27,6 +27,10 @@
     {
       "name": "Tipologia",
       "description": "Operações disponíveis sobre tipologias de entidades"
+    },
+    {
+      "name": "Legislação",
+      "description": "Operações disponíveis sobre os itens legislativos"
     }
   ],
   "schemes": [
@@ -413,6 +417,37 @@
         }
       }
     },
+    "/classes/{id}/pca": {
+      "get": {
+        "tags": [
+          "Classe"
+        ],
+        "summary": "Devolve a informação do PCA",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da classe",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
     "/entidades": {
       "get": {
         "tags": [
@@ -694,6 +729,90 @@
         ],
         "summary": "Devolve a lista de processos em que a tipologia intervem como participante",
         "description": "Dado o id de uma tipologia devolve a lista de processos em que a mesma intervem como participante",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da tipologia",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/legislacao": {
+      "get": {
+        "tags": [
+          "Legislação"
+        ],
+        "summary": "Lista os itens legislativos registados",
+        "produces": [
+          "application/javascript"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/legislacao/{id}": {
+      "get": {
+        "tags": [
+          "Legislação"
+        ],
+        "summary": "Lista os itens legislativos registados",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da tipologia",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/legislacao/{id}/regula": {
+      "get": {
+        "tags": [
+          "Legislação"
+        ],
+        "summary": "Lista os itens legislativos registados",
         "produces": [
           "application/javascript"
         ],
