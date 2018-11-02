@@ -21,15 +21,7 @@ router.get('/nivel/:n', (req, res) => {
 // Devolve a metainformação de uma classe: codigo, titulo, status, desc, codigoPai?, tituloPai?, procTrans?, procTipo?
 router.get('/:id', function (req, res) {
     Classes.consulta(req.params.id)
-        .then(dados => {
-            var resultado = {codigo: dados[0].codigo.value, titulo: dados[0].titulo.value, 
-                                status: dados[0].status.value, desc: dados[0].desc.value}
-            if(dados[0].codigoPai) resultado['codigoPai'] = dados[0].codigoPai.value
-            if(dados[0].tituloPai) resultado['tituloPai'] = dados[0].tituloPai.value
-            if(dados[0].procTrans) resultado['procTrans'] = dados[0].procTrans.value
-            if(dados[0].procTipo) resultado['procTipo'] = dados[0].procTipo.value
-            res.jsonp(resultado)
-        })
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['codigo', 'titulo', 'status', 'desc', 'codigoPai', 'tituloPai', 'procTrans', 'procTipo'])))
         .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta da classe "+req.params.id+": " + erro}))
 })
 

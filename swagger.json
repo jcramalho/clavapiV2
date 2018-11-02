@@ -31,6 +31,10 @@
     {
       "name": "Legislação",
       "description": "Operações disponíveis sobre os itens legislativos"
+    },
+    {
+      "name": "Vocabulário",
+      "description": "Operações disponíveis sobre os vocabulários controlados"
     }
   ],
   "schemes": [
@@ -884,6 +888,59 @@
             "in": "path",
             "required": true,
             "description": "O id do documento legislativo - leg_ddddd",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/vocabularios": {
+      "get": {
+        "tags": [
+          "Vocabulário"
+        ],
+        "summary": "Devolve a lista dos vocabulários controlados",
+        "produces": [
+          "application/javascript"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/vocabularios/{id}": {
+      "get": {
+        "tags": [
+          "Vocabulário"
+        ],
+        "summary": "Devolve a lista dos termos de um VC",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id do VC",
             "type": "string"
           }
         ],

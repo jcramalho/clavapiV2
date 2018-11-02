@@ -13,6 +13,7 @@ app.use('/entidades',require('./routes/entidades'));
 app.use('/tipologias',require('./routes/tipologias'));
 app.use('/legislacao',require('./routes/leg'));
 app.use('/classes',require('./routes/classes'));
+app.use('/vocabularios',require('./routes/vocabularios'));
 
 //swagger
 var swaggerUi = require('swagger-ui-express'),
