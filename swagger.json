@@ -781,7 +781,7 @@
         "tags": [
           "Legislação"
         ],
-        "summary": "Lista os itens legislativos registados",
+        "summary": "Devolve a informação do documento legislativo",
         "produces": [
           "application/javascript"
         ],
@@ -790,7 +790,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "O id da tipologia",
+            "description": "O id do documento legislativo - leg_ddddd",
             "type": "string"
           }
         ],
@@ -812,7 +812,7 @@
         "tags": [
           "Legislação"
         ],
-        "summary": "Lista os itens legislativos registados",
+        "summary": "Devolve a lista dos processos regulados pelo documento legislativo",
         "produces": [
           "application/javascript"
         ],
@@ -821,7 +821,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "O id da tipologia",
+            "description": "O id do documento legislativo - leg_ddddd",
             "type": "string"
           }
         ],

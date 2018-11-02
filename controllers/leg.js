@@ -3,7 +3,7 @@ const client = require('../config/database').onthology;
 var Leg = module.exports
 
 // Lista todos os itens legislativos: id, data, numero, tipo, sumario, entidades
-Leg.list = function () {
+Leg.listar = () => {
     return client.query(
         `SELECT  
             ?id ?data ?numero ?tipo ?sumario
@@ -28,7 +28,7 @@ Leg.list = function () {
 }
 
 // Devolve a informação associada a um documento legislativo: tipo data numero sumario link entidades
-Leg.consulta = id => {
+Leg.consultar = id => {
     var fetchQuery = `
         SELECT  
             ?tipo ?data ?numero ?sumario ?link
