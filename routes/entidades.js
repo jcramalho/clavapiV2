@@ -8,14 +8,14 @@ router.get('/erro', (req, res) => res.jsonp({cod: "Código do Erro", mensagem: "
 
 // Lista todas as entidades: id, sigla, designacao, internacional
 router.get('/', (req, res) => {
-    Entidades.list()      
+    Entidades.listar()      
         .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['id', 'sigla', 'designacao', 'internacional'])))
         .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na listagem das entidades: " + erro}))
 })
 
 // Consulta de uma entidade: sigla, designacao, estado, internacional
 router.get('/:id', (req, res) => {
-    Entidades.consulta(req.params.id)
+    Entidades.consultar(req.params.id)
         .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['sigla', 'designacao', 'estado', 'internacional'])))
         .catch(erro => res.jsonp({cod: "408", mensagem: "Erro na consulta da entidade "+req.params.id+": " + erro}))
 })
