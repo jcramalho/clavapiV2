@@ -102,72 +102,25 @@ router.get('/:id/legislacao', (req, res) => {
         .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta da legislação associada à classe "+req.params.id+": " + erro}))
 })
 
-// Devolve a informação do PCA
+// Devolve a informação base do PCA: idPCA, formaContagem, subFormaContagem, idJustificacao, valores, notas
 router.get('/:id/pca', (req, res) => {
     Classes.pca(req.params.id)
-        .then(dados => {
-            let criteria = dados.Criterios.value.split("###");
-            criteria = criteria.map(a => a.replace(/[^#]+#(.*)/, '$1'));
-
-            Classes.criteria(criteria)
-                .then(function (criteriaData) {
-
-                    dados.Criterios.type = "array";
-                    dados.Criterios.value = criteriaData;
-
-                    res.jsonp(dados)
-                })
-                .catch(error => console.error(error));
-        })
-        .catch(error => console.error(error));
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['idPCA', 'formaContagem', 'subFormaContagem', 'idJustificacao', 'valores', 'notas'])))
+        .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta do PCA associado à classe "+req.params.id+": " + erro}))
 })
 
-
-
-
-
-
-
-router.get('/filtrar/:orgs', function (req, res) {
-    Classes.filterByOrgs(req.params.orgs.split(','))
-        .then(list => res.send(list))
-        .catch(function (error) {
-            console.error(error);
-        });
+// Devolve uma justificação, PCA ou DF, que é composta por uma lista de critérios: criterio, tipoLabel, conteudo
+router.get('/justificacao/:id', (req, res) => {
+    Classes.justificacao(req.params.id)
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['criterio', 'tipoLabel', 'conteudo'])))
+        .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta da justificação "+req.params.id+": " + erro}))
 })
 
-router.get('/:id/descendenciaIndex', function (req, res) {
-    Classes.childrenNew(req.params.id)
-        .then(list => res.send(list))
-        .catch(function (error) {
-            console.error(error);
-        });
-})
-
-router.get('/:id/df', function (req, res) {
+// Devolve a informação base do DF: idDF, valor, idJustificacao
+router.get('/:id/df', (req, res) => {
     Classes.df(req.params.id)
-        .then(function (data) {
-            let criteria = data.Criterios.value.split("###");
-            criteria = criteria.map(a => a.replace(/[^#]+#(.*)/, '$1'));
-
-            Classes.criteria(criteria)
-                .then(function (criteriaData) {
-                    data.Criterios.type = "array";
-                    data.Criterios.value = criteriaData;
-
-                    res.send(data);
-                })
-                .catch(error=>console.error(error));
-        })
-        .catch(error=>console.error(error));
-})
-
-router.get('/:code/check/:level', function (req, res) {
-    Classes.checkCodeAvailability(req.params.code, req.params.level)
-        .then(function (count) {
-            res.send(count);
-        })
-        .catch(error=>console.error(error));
+        .then(dados => res.jsonp(fa.simplificaSPARQLRes(dados, ['idDF', 'valor', 'idJustificacao'])))
+        .catch(erro => res.jsonp({cod: "404", mensagem: "Erro na consulta do DF associado à classe "+req.params.id+": " + erro}))
 })
 
 module.exports = router;

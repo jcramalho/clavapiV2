@@ -422,7 +422,69 @@
         "tags": [
           "Classe"
         ],
-        "summary": "Devolve a informação do PCA",
+        "summary": "Devolve a informação base do PCA - id, formaContagem, subFormaContagem, idJustificacao, valores, notas",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da classe",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/classes/justificacao/{id}": {
+      "get": {
+        "tags": [
+          "Classe"
+        ],
+        "summary": "Devolve uma justificação, PCA ou DF, uma lista de critérios - criterio, tipo, conteudo",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "O id da justificação",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/classes/{id}/df": {
+      "get": {
+        "tags": [
+          "Classe"
+        ],
+        "summary": "Devolve a informação base do DF - idDF, valor, idJustificacao",
         "produces": [
           "application/javascript"
         ],
