@@ -35,6 +35,10 @@
     {
       "name": "Vocabulário",
       "description": "Operações disponíveis sobre os vocabulários controlados"
+    },
+    {
+      "name": "Termos de Índice",
+      "description": "Operações disponíveis sobre os termos de índice"
     }
   ],
   "schemes": [
@@ -941,6 +945,59 @@
             "in": "path",
             "required": true,
             "description": "O id do VC",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/termosIndice": {
+      "get": {
+        "tags": [
+          "Termos de Índice"
+        ],
+        "summary": "Devolve a lista dos termos de índice",
+        "produces": [
+          "application/javascript"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Resposta200"
+          },
+          "400": {
+            "$ref": "#/responses/RespostaErro400"
+          },
+          "500": {
+            "$ref": "#/responses/RespostaErro500"
+          }
+        }
+      }
+    },
+    "/termosIndice/classe/{idClasse}": {
+      "get": {
+        "tags": [
+          "Termos de Índice"
+        ],
+        "summary": "Devolve a lista dos termos de índice associados a um classe",
+        "produces": [
+          "application/javascript"
+        ],
+        "parameters": [
+          {
+            "name": "idClasse",
+            "in": "path",
+            "required": true,
+            "description": "O id da classe",
             "type": "string"
           }
         ],
